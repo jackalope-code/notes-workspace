@@ -1,0 +1,57 @@
+state management updates
+bugfix for note creation
+update content properly on note deletion and new notes
+swap content over to the editing area when a note is selected
+update and save note state both offline and online
+note page and menu updates
+get ready to deploy notes 0.5
+
+demo account, WIP home page, account page, and deployment changes on 0.6
+
+
+0.7 ish
+start something with: tasks, reminders, boards, diagrams. im still missing free form onenote-like note taking, a strong
+PC or mobile experience, free-form drawing and diagramming, one off task lists, reoccurring task reminders.
+
+other things to keep in mind:
+sticky notes
+trello + todoist kind of functionality from previous work
+
+drawing + mobile + offline + sync + reliable + versions + backups + w/e
+
+
+
+
+
+
+fix editor sizing and scroll issues
+Properly update notes on CRUD operations (offline friendly save as you go for your account)
+Button, typography, spacing fixes
+Fix the list display of cards for MVP display and interaction
+
+********
+URGENT
+******
+notes arent created with content??
+*********
+
+add: Checkable and one off or reocurring notes, and draggable notes. Three systems in total for now (consider making this a serious home/office sutie panel):
+    1. an evernote/onenote like note taking page that can share or publish to other things. The core design and a way for me to stay organized. No drawing for
+    now but that + executable lang support + other format exports are stretch goals.
+
+    2. Task lists with reocurring or one-off tasks (tasks must be limited plain text and have other constraints so they are different data types from service 1.
+    consider importing/exporting between services if it makes sense somwhere.) Tasks could be organized like Trello with no timeframe, or organized like Todoist
+    for more complete reminders/scheduling. this should be viewable and somewhat pinnable from the home screen.
+
+    3. draggable note cards that save position and can be used in diagrams (or maybe on the home page as sticky reminder notes?). This could get the most "draw"
+    oriented and would have the most in common with onenote. simple draggable cards and diagramming is good enough as its own feature, so maybe start by trying
+    to build out simple drawing and diagramming tools. The focus on a subset of tools could still make this useful for software and state diagramming when I want
+    more consistency than the blogger/coder/freeform notes of simple service 1.
+
+make mui more consistent; do better with typography, buttons, spacing. Keep fixing the weird stuff and improving on usability. Clean up, refactor, test a bit.
+
+then
+Test for mobile and try to get something actually usable and reliable and get it deployed. get a secured demo account going. host the project from the portfolio site.
+
+mobile and offline friendly pwa goal still so keep that in mind.
+theres currently no frontend deployment.
