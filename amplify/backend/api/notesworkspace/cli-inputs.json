@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "notesworkspace",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "C:\\Users\\seand\\Code\\notes-workspace\\amplify\\backend\\api\\notesworkspace\\schema.graphql",
+    "defaultAuthType": {
+      "mode": "AMAZON_COGNITO_USER_POOLS",
+      "cognitoUserPoolId": "authnotesworkspace2bebd443"
+    },
+    "conflictResolution": {
+      "defaultResolutionStrategy": {
+        "type": "AUTOMERGE"
+      }
+    }
+  }
+}

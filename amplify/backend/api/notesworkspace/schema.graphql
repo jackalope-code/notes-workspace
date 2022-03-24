@@ -1,0 +1,4 @@
+type Note @model @auth(rules: [{ allow: owner }]) {
+  title: String!
+  content: String!
+}
