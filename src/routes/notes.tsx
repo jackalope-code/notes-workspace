@@ -20,7 +20,7 @@ interface AppBarClippedDrawerProps {
     
 }
 
-const NotesPage = (props: any) => {
+const NotesPage = ({signOut: any}) => {
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
     const [showDialog, currentId, setDialogOpen, closeDialog] = useConfirmDialog();
@@ -67,7 +67,7 @@ const NotesPage = (props: any) => {
                         <AddIcon color="inherit" />
                     </IconButton>
                     <Link to="/account">Account</Link>
-                    <Button color="inherit">{true ? "Log out" : "Log in"}</Button>
+                    <Button color="inherit" onClick={signOut}>"Log out"</Button>
                 </Toolbar>
             </AppBar>
             <Drawer

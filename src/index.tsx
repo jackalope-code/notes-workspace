@@ -66,8 +66,8 @@ ReactDOM.render(
         </Routes>
         <Routes>
           <Route path="notes">
-            <Route path=":noteId" element={<NotesPage />} />
-            <Route path="" element={<NotesPage />} />
+            <Route path=":noteId" element={<NotesPage signOut={signOut}/>} />
+            <Route path="" element={<NotesPage signOut={signOut}/>} />
           </Route>
           <Route path="/account" element={<Account />} />
           <Route path="/diagrams" element={<DiagramPage />} />
