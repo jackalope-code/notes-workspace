@@ -14,6 +14,12 @@
     "categories": {
       "auth": {
         "notesworkspace2bebd443": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "dqm3ywup04kwx",
+          "type": "cicd"
+        }
       }
     }
   }
