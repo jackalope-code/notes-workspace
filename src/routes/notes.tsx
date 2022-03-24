@@ -20,7 +20,7 @@ interface AppBarClippedDrawerProps {
     
 }
 
-const NotesPage = ({signOut: any}) => {
+const NotesPage = ({signOut}: any) => {
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
     const [showDialog, currentId, setDialogOpen, closeDialog] = useConfirmDialog();
