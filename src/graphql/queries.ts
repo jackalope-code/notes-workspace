@@ -2,14 +2,69 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const syncNotes = /* GraphQL */ `
-  query SyncNotes(
-    $filter: ModelNoteFilterInput
+export const getNoteGrouping = /* GraphQL */ `
+  query GetNoteGrouping($id: ID!) {
+    getNoteGrouping(id: $id) {
+      id
+      noteID
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      OrderedNotes {
+        items {
+          id
+          title
+          content
+          sortednotecollectionID
+          notegrouID
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+        startedAt
+      }
+    }
+  }
+`;
+export const listNoteGroupings = /* GraphQL */ `
+  query ListNoteGroupings(
+    $filter: ModelNoteGroupingFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listNoteGroupings(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        noteID
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        OrderedNotes {
+          nextToken
+          startedAt
+        }
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncNoteGroupings = /* GraphQL */ `
+  query SyncNoteGroupings(
+    $filter: ModelNoteGroupingFilterInput
     $limit: Int
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncNotes(
+    syncNoteGroupings(
       filter: $filter
       limit: $limit
       nextToken: $nextToken
@@ -17,14 +72,16 @@ export const syncNotes = /* GraphQL */ `
     ) {
       items {
         id
-        title
-        content
+        noteID
         _version
         _deleted
         _lastChangedAt
         createdAt
         updatedAt
-        owner
+        OrderedNotes {
+          nextToken
+          startedAt
+        }
       }
       nextToken
       startedAt
@@ -37,6 +94,8 @@ export const getNote = /* GraphQL */ `
       id
       title
       content
+      sortednotecollectionID
+      notegrouID
       _version
       _deleted
       _lastChangedAt
@@ -57,6 +116,39 @@ export const listNotes = /* GraphQL */ `
         id
         title
         content
+        sortednotecollectionID
+        notegrouID
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncNotes = /* GraphQL */ `
+  query SyncNotes(
+    $filter: ModelNoteFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncNotes(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        title
+        content
+        sortednotecollectionID
+        notegrouID
         _version
         _deleted
         _lastChangedAt
