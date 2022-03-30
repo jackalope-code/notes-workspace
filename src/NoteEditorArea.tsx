@@ -106,7 +106,7 @@ const NoteEditorArea = ({initialNoteId}: NoteEditorProps) => {
                 limit: 1
             }))[0];
             noteRes = 
-                new Note({title, content: serializedText, order: lastPlacedNote.order});
+                new Note({title, content: serializedText, order: lastPlacedNote.order+1});
         }
 
         return noteRes;
