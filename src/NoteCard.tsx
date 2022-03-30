@@ -1,6 +1,4 @@
-import { Card } from "@aws-amplify/ui-react";
 import { CardContentProps } from "@material-ui/core";
-import { CardHeader, CardContent, Typography, CardActions, Box, IconButton, Modal } from "@mui/material";
 import { convertFromRaw, Editor, EditorState } from "draft-js";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -12,6 +10,7 @@ import { useDrag, useDrop } from 'react-dnd'
 import { useRef } from "react";
 import type { XYCoord, Identifier } from 'dnd-core'
 import { NumericDictionaryIteratee } from "lodash";
+import { CardHeader, CardContent, Typography, CardActions, Box, IconButton, Modal, Card, CardActionArea } from "@mui/material";
 
 // handleEditNote: (id: string, data: Note) => void;
 interface NoteCardProps {
@@ -121,15 +120,18 @@ const NoteCard = ({noteId, title, rawContent, handleDeleteNote, moveCard, index}
     drag(drop(ref))
     return (
         // <Card className="note-card" variation="outlined">
-        <Card ref={ref} className="note-card" variation="outlined" style={{height: "300px", display: "flex", flexDirection: "column"}}>
-            <CardHeader title={title}></CardHeader>
-            <CardContent className="card-contents" style={{overflow: "hidden", textOverflow: "ellipsis", overflowWrap: "anywhere"}}>
-                {cardContent}
-            </CardContent>
+        //sx={{height: "300px", display: "flex", flexDirection: "column"}}
+        <Card ref={ref} className="note-card" variant="outlined" sx={{minHeight: "300px", "&:hover": {background: "#aacccc"}}}>
+            <CardActionArea component={Link} to={`/notes/${noteId}`}>
+                <CardHeader title={title}></CardHeader>
+                <CardContent className="card-contents" style={{overflow: "hidden", textOverflow: "ellipsis", overflowWrap: "anywhere"}}>
+                    {cardContent}
+                </CardContent>
+            </CardActionArea>
             <CardActions>
-                <IconButton component={Link} to={`/notes/${noteId}`} >
+                {/* <IconButton>
                     <LaunchIcon />
-                </IconButton>
+                </IconButton> */}
                 <IconButton onClick={() => handleDeleteNote(noteId)}>
                     <DeleteIcon />
                 </IconButton>

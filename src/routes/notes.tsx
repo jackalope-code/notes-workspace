@@ -1,7 +1,6 @@
 import NoteEditorArea from "../NoteEditorArea";
 import NotesContainer from "../NotesContainer";
 import { Button, withAuthenticator } from "@aws-amplify/ui-react";
-import { AppBar, Box, Drawer, IconButton, Toolbar, Typography, } from "@mui/material";
 import { DataStore } from "aws-amplify";
 import { useEffect, useMemo, useState } from "react";
 import { Note } from "../models";
@@ -15,12 +14,13 @@ import { debounce, throttle } from "lodash";
 import AddIcon from '@mui/icons-material/Add';
 import { DndProvider } from "react-dnd";
 import {HTML5Backend} from 'react-dnd-html5-backend';
+import { AppBar, Box, Drawer, IconButton, Toolbar, Typography} from "@mui/material";
 
 interface AppBarClippedDrawerProps {
-    
+    signOut: (data?: Record<string | number | symbol, any> | undefined) => void;
 }
 
-const NotesPage = ({signOut}: any) => {
+const NotesPage = ({signOut}: AppBarClippedDrawerProps) => {
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
     const [showDialog, currentId, setDialogOpen, closeDialog] = useConfirmDialog();
@@ -67,7 +67,7 @@ const NotesPage = ({signOut}: any) => {
                         <AddIcon color="inherit" />
                     </IconButton>
                     <Link to="/account">Account</Link>
-                    <Button color="inherit" onClick={signOut}>"Log out"</Button>
+                    <Button color="inherit" onClick={signOut}>Log out</Button>
                 </Toolbar>
             </AppBar>
             <Drawer

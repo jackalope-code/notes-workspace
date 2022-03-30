@@ -1,6 +1,6 @@
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import { TextField } from "@mui/material";
-import { DataStore } from "aws-amplify";
+import { DataStore, Predicates, SortDirection } from "aws-amplify";
 import { convertToRaw } from "draft-js";
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
@@ -18,6 +18,7 @@ const inputStyle = {
     display: "block",
     marginTop: "5px",
     marginBottom: "5px",
+    fontSize: "18px"
 }
 
 interface NoteEditorProps {
@@ -32,7 +33,6 @@ const NoteEditorArea = ({initialNoteId}: NoteEditorProps) => {
     const editorRef = useRef<Editor>(null);
     const [title, setTitle] = useState("")
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
-    // const [noteData, setNoteData] = useState(new Note({title: "", content: ""}));
     const [readOnly, setReadOnly] = useState(false);
     const [noteId, setNoteId] = useState(initialNoteId);
     const navigate = useNavigate();
@@ -52,7 +52,7 @@ const NoteEditorArea = ({initialNoteId}: NoteEditorProps) => {
     useEffect(() => {
         const noteSubscription = DataStore.observeQuery(Note, p => p.id("eq", noteId)).subscribe(snapshot => {
             const {items, isSynced} = snapshot
-            console.log("queried and subscribed to note snapshot", snapshot)
+            console.log("queried and subscribed to note snapshot", snapshot, `synced: ${isSynced}`)
             // set state from the first result
             setEditorStateFromNote(items[0]);
         })
@@ -63,7 +63,16 @@ const NoteEditorArea = ({initialNoteId}: NoteEditorProps) => {
 
     useEffect(() => {
         setNoteId(initialNoteId)
+        // TODO: clears note state when the note id passed in (in this case from a route) is empty. theres currently no confirm dialog for lost work.
+        if(initialNoteId === "") {
+            clearEditorState();
+        }
     }, [initialNoteId]);
+
+    function clearEditorState() {
+        setEditorState(EditorState.createEmpty());
+        setTitle("");
+    }
 
     async function createNoteAsync() {
         // await DataStore.save(note)
@@ -77,6 +86,7 @@ const NoteEditorArea = ({initialNoteId}: NoteEditorProps) => {
         const editorContent = convertFromRaw(JSON.parse(rawDraftEditorString));
         const editorState = EditorState.createWithContent(editorContent);
         return editorState;
+
     }
 
     async function getNoteObjectFromEditor(): Promise<Note> {
@@ -90,8 +100,13 @@ const NoteEditorArea = ({initialNoteId}: NoteEditorProps) => {
                     updated.content = serializedText;
                 })
         } else {
+            // the count of items in the collection the order found from this query would also be
+            const lastPlacedNote = (await DataStore.query(Note, Predicates.ALL, {
+                sort: note => note.order(SortDirection.DESCENDING),
+                limit: 1
+            }))[0];
             noteRes = 
-                new Note({title, content: serializedText});
+                new Note({title, content: serializedText, order: lastPlacedNote.order});
         }
 
         return noteRes;
@@ -108,14 +123,9 @@ const NoteEditorArea = ({initialNoteId}: NoteEditorProps) => {
         getNoteObjectFromEditor().then(note => {
             DataStore.save(note).then(() => {
                 if(noteId !== note.id) {
-                    // Do I really need to set the note id anymore? this is kind of weird regardless bc i have mixed state
-                    // from this stateful component and the one above it that is doing id/routing. state could probably
-                    // get split up better to make some of these components less confusing.
-
-                    // I have mixed state from the component getting a note id as a prop, then managing its own id, but also getting
-                    // redirected and then changed from props again from the note id component. confusing.
+                    // This component changes its own id in state and then blindly navigates to the new url after a save event.
                     setNoteId(note.id);
-                    navigate(note.id)
+                    navigate(note.id);
                 }
             })
         });
@@ -125,13 +135,6 @@ const NoteEditorArea = ({initialNoteId}: NoteEditorProps) => {
         setTitle(e.currentTarget.value);
     }
 
-    // commented out click event
-    // function handlePageClick(event: any) {
-    //     console.log('click event', event);
-    // }
-
-    // const blockDndPlugin = createBlockDndPlugin();
-
 
     // TODO: throttling with note creation and editing
     // const throttledNoteUpdate = useMemo(
@@ -140,20 +143,21 @@ const NoteEditorArea = ({initialNoteId}: NoteEditorProps) => {
 
     
     return (
-        <div>
-            <TextField id="notes-title" label="Title" sx={inputStyle} value={title} onChange={titleChangeHandler}></TextField>
-            {/* <div style={{border: "1px solid black", height: "100vh", display: "block"}} onClick={(e) => handlePageClick(e)} > */}
-            <div style={{border: "1px solid black", height: "100vh", display: "block"}} >
-                <Editor
-                    readOnly={readOnly}
-                    editorState={editorState}
-                    onEditorStateChange={onEditorChange}
-                />
+        <div style={{display: "flex", flexDirection: "column", height: "100%", padding: "10px"}}>
+            <TextField id="notes-title" label="Title" sx={inputStyle} value={title} onChange={titleChangeHandler} variant="standard" size="medium"/>
+            {/* <div style={{border: "1px solid black", , display: "block"}} onClick={(e) => handlePageClick(e)} > */}
+            <Editor
+                wrapperStyle={{flexGrow: "1"}}
+                readOnly={readOnly}
+                editorState={editorState}
+                onEditorStateChange={onEditorChange}
+            />
+            {/* <div style={{border: "1px solid black", display: "block"}} > */}
                 {/* DraftJS plugins */}
                 {/* editorRef={editorRef} */}
                 {/* plugins={[blockDndPlugin]} */}
-            </div>
-                <button onClick={handleSaveButton}>Save</button>
+            {/* </div> */}
+            <button onClick={handleSaveButton}>Save</button>
         </div>
     );
 };
