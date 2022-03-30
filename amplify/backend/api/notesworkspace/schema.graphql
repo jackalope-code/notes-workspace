@@ -1,4 +1,5 @@
-type Note @model @auth(rules: [{ allow: owner }]) {
+type Note @model @auth(rules: [{allow: owner}]) {
   title: String!
   content: String!
+  order: Int!
 }
