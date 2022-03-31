@@ -50,15 +50,20 @@ const NoteEditorArea = ({initialNoteId}: NoteEditorProps) => {
     };
     
     useEffect(() => {
-        const noteSubscription = DataStore.observeQuery(Note, p => p.id("eq", noteId)).subscribe(snapshot => {
-            const {items, isSynced} = snapshot
-            console.log("queried and subscribed to note snapshot", snapshot, `synced: ${isSynced}`)
-            // set state from the first result
-            setEditorStateFromNote(items[0]);
-        })
-        focusEditor();
+        // conditionally load one actively edited note. load nothing if there is no id set on this component.
+        // TODO: check the overall app flow and consider additional checks/validation. add test coverage around this.
+        if(noteId !== "") {
+            const noteSubscription = DataStore.observeQuery(Note, p => p.id("eq", noteId)).subscribe(snapshot => {
+                const {items, isSynced} = snapshot
+                console.log("queried and subscribed to note snapshot", snapshot, `synced: ${isSynced}`)
+                // set state from the first result
+                setEditorStateFromNote(items[0]);
+            })
 
-        return () => noteSubscription.unsubscribe();
+            return () => noteSubscription.unsubscribe();
+        }
+
+        focusEditor();
     }, [noteId]);
 
     useEffect(() => {
@@ -105,13 +110,15 @@ const NoteEditorArea = ({initialNoteId}: NoteEditorProps) => {
                 sort: note => note.order(SortDirection.DESCENDING),
                 limit: 1
             }))[0];
+            const lastOrder = lastPlacedNote ? lastPlacedNote.order : 0;
             noteRes = 
-                new Note({title, content: serializedText, order: lastPlacedNote.order+1});
+                new Note({title, content: serializedText, order: lastOrder+1});
         }
-
+        console.log('constructed note from editor', noteRes);
         return noteRes;
     }
 
+    // TODO: throw error when passed an undefined/invalid note
     function setEditorStateFromNote(note: Note) {
         setTitle(note.title);
         setReadOnly(true);
