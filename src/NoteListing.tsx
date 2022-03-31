@@ -1,8 +1,9 @@
-import { DataStore } from "aws-amplify";
+import { DataStore, Predicates, SortDirection } from "aws-amplify";
 import update from 'immutability-helper'
 import { useCallback, useEffect, useState } from "react";
 import { Note } from "./models";
 import NoteCard from "./NoteCard";
+import notes from "./routes/notes";
 
 // TODO: fix prop drilling
 interface NoteListingProps {
@@ -20,7 +21,9 @@ const NoteListing = ({onDelete}: NoteListingProps) => {
   // sort by new notes. add to the top. add filtering controls.
   async function fetchNotes() {
     async function queryNotes() {
-        const notes = await DataStore.query(Note);
+        const notes = await DataStore.query(Note, Predicates.ALL, {
+          sort: s => s.order(SortDirection.ASCENDING)
+        });
         setNotes(notes);
     }
 
@@ -59,18 +62,18 @@ const NoteListing = ({onDelete}: NoteListingProps) => {
   }
 
   const moveCard = useCallback((dragIndex: number, hoverIndex: number) => {
-      setNotes((prevNotes: Note[]) =>
-        update(prevNotes, {
-          $splice: [
-            [dragIndex, 1],
-            [hoverIndex, 0, prevNotes[dragIndex] as Note],
-          ],
-        }),
-      )
-    }, [])
-
-    const renderCard = useCallback(
-      (card: Note, index: number) => {
+    setNotes((prevNotes: Note[]) =>
+    update(prevNotes, {
+      $splice: [
+        [dragIndex, 1],
+        [hoverIndex, 0, prevNotes[dragIndex] as Note],
+      ],
+    }),
+    )
+  }, [])
+  
+  const renderCard = useCallback(
+    (card: Note, index: number) => {
         DataStore.save(
           Note.copyOf(card, updated => {
             updated.order = index;
