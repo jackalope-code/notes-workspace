@@ -1,8 +1,8 @@
 import { withAuthenticator } from "@aws-amplify/ui-react";
-import { TextField } from "@mui/material";
+import { TextField, Typography } from "@mui/material";
 import { DataStore, Predicates, SortDirection } from "aws-amplify";
 import { convertToRaw } from "draft-js";
-import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
+import { ChangeEvent, CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import {EditorState, convertFromRaw} from "draft-js";
 import { Note } from "./models";
@@ -26,10 +26,11 @@ interface NoteEditorProps {
     // onEditorStateChange: (state: EditorState) => void;
     // titleChangeHandler: (title: ChangeEvent<HTMLInputElement>) => void;
     // title: string;
-    initialNoteId: string
+    initialNoteId: string;
+    sx: CSSProperties;
 }
 
-const NoteEditorArea = ({initialNoteId}: NoteEditorProps) => {
+const NoteEditorArea = ({initialNoteId, sx}: NoteEditorProps) => {
     const editorRef = useRef<Editor>(null);
     const [title, setTitle] = useState("")
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
@@ -51,7 +52,7 @@ const NoteEditorArea = ({initialNoteId}: NoteEditorProps) => {
     
     useEffect(() => {
         // conditionally load one actively edited note. load nothing if there is no id set on this component.
-        // TODO: check the overall app flow and consider additional checks/validation. add test coverage around this.
+        // TODO: check the overall app flow and consider additional checks/validation. add test coverage around this for multiple editors.
         if(noteId !== "") {
             const noteSubscription = DataStore.observeQuery(Note, p => p.id("eq", noteId)).subscribe(snapshot => {
                 const {items, isSynced} = snapshot
@@ -150,8 +151,12 @@ const NoteEditorArea = ({initialNoteId}: NoteEditorProps) => {
 
     
     return (
-        <div style={{display: "flex", flexDirection: "column", height: "100%", padding: "10px"}}>
-            <TextField id="notes-title" label="Title" sx={inputStyle} value={title} onChange={titleChangeHandler} variant="standard" size="medium"/>
+        <div style={{display: "flex", flexDirection: "column", padding: "10px", ...sx}}>
+            <div style={{display: "flex", justifyContent: "space-between"}}>
+                <TextField id="notes-title" label="Title" sx={inputStyle} value={title} onChange={titleChangeHandler} variant="standard" size="medium"/>
+                <Typography>Last updated field</Typography>
+                <Typography>Sync status field</Typography>
+            </div>
             {/* <div style={{border: "1px solid black", , display: "block"}} onClick={(e) => handlePageClick(e)} > */}
             <Editor
                 wrapperStyle={{flexGrow: "1"}}
