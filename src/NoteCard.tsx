@@ -10,6 +10,7 @@ import { useDrag, useDrop } from 'react-dnd'
 import { useRef } from "react";
 import type { XYCoord, Identifier } from 'dnd-core'
 import { NumericDictionaryIteratee } from "lodash";
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { CardHeader, CardContent, Typography, CardActions, Box, IconButton, Modal, Card, CardActionArea } from "@mui/material";
 
 // handleEditNote: (id: string, data: Note) => void;
@@ -18,7 +19,7 @@ interface NoteCardProps {
     title: string;
     rawContent: string;
     handleDeleteNote: (id: string) => void;
-    moveCard: (dragIndex: number, hoverIndex: number) => void;
+    moveCard: (dragIndex: number, hoverIndex: number, isDragging: boolean) => void;
     index: number;
 }
 
@@ -86,7 +87,7 @@ const NoteCard = ({noteId, title, rawContent, handleDeleteNote, moveCard, index}
         }
 
         // Time to actually perform the action
-        moveCard(dragIndex, hoverIndex)
+        moveCard(dragIndex, hoverIndex, isDragging)
 
         // Note: we're mutating the monitor item here!
         // Generally it's better to avoid mutations,
@@ -102,11 +103,9 @@ const NoteCard = ({noteId, title, rawContent, handleDeleteNote, moveCard, index}
         return { noteId, index }
         },
         collect: (monitor: any) => ({
-        isDragging: monitor.isDragging(),
+            isDragging: monitor.isDragging(),
         }),
     })
-
-    const opacity = isDragging ? 0 : 1;
 
     let cardContent;
     try {
@@ -115,9 +114,9 @@ const NoteCard = ({noteId, title, rawContent, handleDeleteNote, moveCard, index}
     } catch(error) {
         cardContent = rawContent;
     }
-    
+
     // onClick={() => handleOpenNote(id)
-    drag(drop(ref))
+    drag(drop(ref));
     return (
         // <Card className="note-card" variation="outlined">
         //sx={{height: "300px", display: "flex", flexDirection: "column"}}
@@ -129,11 +128,11 @@ const NoteCard = ({noteId, title, rawContent, handleDeleteNote, moveCard, index}
                 </CardContent>
             </CardActionArea>
             <CardActions>
-                {/* <IconButton>
-                    <LaunchIcon />
-                </IconButton> */}
                 <IconButton onClick={() => handleDeleteNote(noteId)}>
                     <DeleteIcon />
+                </IconButton>
+                <IconButton>
+                    <MoreHorizIcon />
                 </IconButton>
             </CardActions>
         </Card>

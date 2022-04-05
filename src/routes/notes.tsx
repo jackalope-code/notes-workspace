@@ -1,6 +1,5 @@
 import NoteEditorArea from "../NoteEditorArea";
 import NotesContainer from "../NotesContainer";
-import { Button, withAuthenticator } from "@aws-amplify/ui-react";
 import { DataStore } from "aws-amplify";
 import { useEffect, useMemo, useState } from "react";
 import { Note } from "../models";
@@ -14,7 +13,9 @@ import { debounce, throttle } from "lodash";
 import AddIcon from '@mui/icons-material/Add';
 import { DndProvider } from "react-dnd";
 import {HTML5Backend} from 'react-dnd-html5-backend';
-import { AppBar, Box, Drawer, IconButton, Toolbar, Typography} from "@mui/material";
+import { AppBar, Box, Drawer, IconButton, Toolbar, Typography, Button} from "@mui/material";
+import { TouchBackend } from "react-dnd-touch-backend";
+import { isMobile } from "react-device-detect";
 
 interface AppBarClippedDrawerProps {
     signOut: (data?: Record<string | number | symbol, any> | undefined) => void;
@@ -24,6 +25,8 @@ const NotesPage = ({signOut}: AppBarClippedDrawerProps) => {
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
     const [showDialog, currentId, setDialogOpen, closeDialog] = useConfirmDialog();
+    // TODO: reuse note confirm delete dialog for logout for now
+    const [showLogoutDialog, idUnused, openLogoutDialog, closeLogoutDialog] = useConfirmDialog();
 
     const drawerWidth = 400;
 
@@ -53,46 +56,62 @@ const NotesPage = ({signOut}: AppBarClippedDrawerProps) => {
     console.log("note route params", params)
     // function handleNoteLaunched(string)
     
+    function handleLogout() {
+        const logout = async () => {
+            await DataStore.clear();
+            signOut();
+
+        }
+        logout();
+    }
 
     // Drawer?
     // position: 'relative'
     
     return (
-        <Box sx={{display: 'flex', height: "100vh"}}>
+        <Box sx={{display: 'flex'}}>
             {/* <NotesAppBar /> */}
             <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
                 <Toolbar>
-                    <Link to="/"><Typography>Home</Typography></Link>
+                    <Button component={Link} to="/" sx={{color: "white"}}>Home</Button>
                     <IconButton component={Link} to="/notes" >
                         <AddIcon color="inherit" />
                     </IconButton>
-                    <Link to="/account">Account</Link>
-                    <Button color="inherit" onClick={signOut}>Log out</Button>
+                    <Button component={Link} to="/tasks" sx={{color: "white"}}>Tasks and Reminders</Button>
+                    <Button component={Link} to="/account" sx={{color: "white"}}>Account</Button>
+                    <span style={{color: "white", margin: "10px 0px"}}>Boards</span>
+                    <span style={{color: "white", margin: "10px 0px"}}>Sticky notes, interactive shortcuts (from home)</span>
+                    <Button color="inherit" onClick={() => openLogoutDialog("")}>Log out</Button>
                 </Toolbar>
             </AppBar>
             <Drawer
-            variant="permanent"
-            open={true}
-            sx={{
-                width: drawerWidth,
-                flexShrink: 0,
-                '& .MuiDrawer-paper': {
-                width: drawerWidth,
-                boxSizing: 'border-box',
-                },
-            }}
+                variant="permanent"
+                open={true}
+                sx={{
+                    width: drawerWidth,
+                    flexShrink: 0,
+                    '& .MuiDrawer-paper': {
+                    width: drawerWidth,
+                    boxSizing: 'border-box',
+                    },
+                }}
             >
                 {/* AppBar spacing */}
                 <Toolbar />
-                <DndProvider backend={HTML5Backend}>
+                <DndProvider backend={isMobile ? TouchBackend : HTML5Backend } options={{enableMouseEvents: true}}>
                     <NoteListing onDelete={handleDelete}></NoteListing>
                 </DndProvider>
-                <ConfirmDialog open={showDialog} handleChoiceNo={closeDialog} handleChoiceYes={dialogDelete}/>
+                <ConfirmDialog open={showDialog} handleChoiceNo={closeDialog} handleChoiceYes={dialogDelete} title="Delete note?">
+                    Are you sure that you want to delete this note?
+                </ConfirmDialog>
+                <ConfirmDialog open={showLogoutDialog} handleChoiceNo={closeLogoutDialog} handleChoiceYes={handleLogout} title="Confirm logout">
+                    Are you sure you want to log out? You will lose your unsaved note changes.
+                </ConfirmDialog>
             </Drawer>
-            <Box component="main" sx={{flexGrow: 1}}>
+            <Box component="main" sx={{display: "flex", flex: 1}}>
                 {/* TODO: switched routing for note editing here */}
                 <Toolbar />
-                <NoteEditorArea initialNoteId={params.noteId !== undefined ? params.noteId : ""} />
+                <NoteEditorArea sx={{flex: 1}} initialNoteId={params.noteId !== undefined ? params.noteId : ""} />
             </Box>
         </Box>
     );
