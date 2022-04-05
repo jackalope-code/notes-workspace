@@ -110,7 +110,7 @@ const NotesPage = ({signOut}: AppBarClippedDrawerProps) => {
             </Drawer>
             {/* Flex display pulls the title behind the bar */}
             {/* <Box component="main" sx={{display: "flex", flex: 1}}> */}
-            <Box component="main" sx={{display: "flex", flex: 1}}>
+            <Box component="main" sx={{flex: 1}}>
                 {/* TODO: switched routing for note editing here */}
                 <Toolbar />
                 <NoteEditorArea sx={{flex: 1}} initialNoteId={params.noteId !== undefined ? params.noteId : ""} />
