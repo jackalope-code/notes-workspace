@@ -98,7 +98,7 @@ const NotesPage = ({signOut}: AppBarClippedDrawerProps) => {
             >
                 {/* AppBar spacing */}
                 <Toolbar />
-                <DndProvider backend={isMobile ? TouchBackend : HTML5Backend } options={{enableMouseEvents: true}}>
+                <DndProvider backend={true ? TouchBackend : HTML5Backend } options={{enableMouseEvents: true}}>
                     <NoteListing onDelete={handleDelete}></NoteListing>
                 </DndProvider>
                 <ConfirmDialog open={showDialog} handleChoiceNo={closeDialog} handleChoiceYes={dialogDelete} title="Delete note?">
@@ -108,6 +108,8 @@ const NotesPage = ({signOut}: AppBarClippedDrawerProps) => {
                     Are you sure you want to log out? You will lose your unsaved note changes.
                 </ConfirmDialog>
             </Drawer>
+            {/* Flex display pulls the title behind the bar */}
+            {/* <Box component="main" sx={{display: "flex", flex: 1}}> */}
             <Box component="main" sx={{display: "flex", flex: 1}}>
                 {/* TODO: switched routing for note editing here */}
                 <Toolbar />
