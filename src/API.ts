@@ -2,20 +2,24 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateNoteGroupingInput = {
+export type CreateNoteInput = {
   id?: string | null,
-  noteID: string,
+  title: string,
+  content: string,
+  order: number,
   _version?: number | null,
 };
 
-export type ModelNoteGroupingConditionInput = {
-  noteID?: ModelIDInput | null,
-  and?: Array< ModelNoteGroupingConditionInput | null > | null,
-  or?: Array< ModelNoteGroupingConditionInput | null > | null,
-  not?: ModelNoteGroupingConditionInput | null,
+export type ModelNoteConditionInput = {
+  title?: ModelStringInput | null,
+  content?: ModelStringInput | null,
+  order?: ModelIntInput | null,
+  and?: Array< ModelNoteConditionInput | null > | null,
+  or?: Array< ModelNoteConditionInput | null > | null,
+  not?: ModelNoteConditionInput | null,
 };
 
-export type ModelIDInput = {
+export type ModelStringInput = {
   ne?: string | null,
   eq?: string | null,
   le?: string | null,
@@ -55,23 +59,16 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
-export type NoteGrouping = {
-  __typename: "NoteGrouping",
-  id?: string,
-  noteID?: string,
-  _version?: number,
-  _deleted?: boolean | null,
-  _lastChangedAt?: number,
-  createdAt?: string,
-  updatedAt?: string,
-  OrderedNotes?: ModelNoteConnection,
-};
-
-export type ModelNoteConnection = {
-  __typename: "ModelNoteConnection",
-  items?:  Array<Note | null >,
-  nextToken?: string | null,
-  startedAt?: number | null,
+export type ModelIntInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
 };
 
 export type Note = {
@@ -79,8 +76,7 @@ export type Note = {
   id?: string,
   title?: string,
   content?: string,
-  sortednotecollectionID?: string,
-  notegrouID?: string,
+  order?: number,
   _version?: number,
   _deleted?: boolean | null,
   _lastChangedAt?: number,
@@ -89,58 +85,11 @@ export type Note = {
   owner?: string | null,
 };
 
-export type UpdateNoteGroupingInput = {
-  id: string,
-  noteID?: string | null,
-  _version?: number | null,
-};
-
-export type DeleteNoteGroupingInput = {
-  id: string,
-  _version?: number | null,
-};
-
-export type CreateNoteInput = {
-  id?: string | null,
-  title: string,
-  content: string,
-  sortednotecollectionID: string,
-  notegrouID: string,
-  _version?: number | null,
-};
-
-export type ModelNoteConditionInput = {
-  title?: ModelStringInput | null,
-  content?: ModelStringInput | null,
-  sortednotecollectionID?: ModelIDInput | null,
-  notegrouID?: ModelIDInput | null,
-  and?: Array< ModelNoteConditionInput | null > | null,
-  or?: Array< ModelNoteConditionInput | null > | null,
-  not?: ModelNoteConditionInput | null,
-};
-
-export type ModelStringInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  size?: ModelSizeInput | null,
-};
-
 export type UpdateNoteInput = {
   id: string,
   title?: string | null,
   content?: string | null,
-  sortednotecollectionID?: string | null,
-  notegrouID?: string | null,
+  order?: number | null,
   _version?: number | null,
 };
 
@@ -149,140 +98,20 @@ export type DeleteNoteInput = {
   _version?: number | null,
 };
 
-export type ModelNoteGroupingFilterInput = {
-  id?: ModelIDInput | null,
-  noteID?: ModelIDInput | null,
-  and?: Array< ModelNoteGroupingFilterInput | null > | null,
-  or?: Array< ModelNoteGroupingFilterInput | null > | null,
-  not?: ModelNoteGroupingFilterInput | null,
-};
-
-export type ModelNoteGroupingConnection = {
-  __typename: "ModelNoteGroupingConnection",
-  items?:  Array<NoteGrouping | null >,
-  nextToken?: string | null,
-  startedAt?: number | null,
-};
-
 export type ModelNoteFilterInput = {
   title?: ModelStringInput | null,
   content?: ModelStringInput | null,
-  sortednotecollectionID?: ModelIDInput | null,
-  notegrouID?: ModelIDInput | null,
+  order?: ModelIntInput | null,
   and?: Array< ModelNoteFilterInput | null > | null,
   or?: Array< ModelNoteFilterInput | null > | null,
   not?: ModelNoteFilterInput | null,
 };
 
-export type CreateNoteGroupingMutationVariables = {
-  input?: CreateNoteGroupingInput,
-  condition?: ModelNoteGroupingConditionInput | null,
-};
-
-export type CreateNoteGroupingMutation = {
-  createNoteGrouping?:  {
-    __typename: "NoteGrouping",
-    id: string,
-    noteID: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    createdAt: string,
-    updatedAt: string,
-    OrderedNotes?:  {
-      __typename: "ModelNoteConnection",
-      items:  Array< {
-        __typename: "Note",
-        id: string,
-        title: string,
-        content: string,
-        sortednotecollectionID: string,
-        notegrouID: string,
-        _version: number,
-        _deleted?: boolean | null,
-        _lastChangedAt: number,
-        createdAt: string,
-        updatedAt: string,
-        owner?: string | null,
-      } | null >,
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-  } | null,
-};
-
-export type UpdateNoteGroupingMutationVariables = {
-  input?: UpdateNoteGroupingInput,
-  condition?: ModelNoteGroupingConditionInput | null,
-};
-
-export type UpdateNoteGroupingMutation = {
-  updateNoteGrouping?:  {
-    __typename: "NoteGrouping",
-    id: string,
-    noteID: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    createdAt: string,
-    updatedAt: string,
-    OrderedNotes?:  {
-      __typename: "ModelNoteConnection",
-      items:  Array< {
-        __typename: "Note",
-        id: string,
-        title: string,
-        content: string,
-        sortednotecollectionID: string,
-        notegrouID: string,
-        _version: number,
-        _deleted?: boolean | null,
-        _lastChangedAt: number,
-        createdAt: string,
-        updatedAt: string,
-        owner?: string | null,
-      } | null >,
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-  } | null,
-};
-
-export type DeleteNoteGroupingMutationVariables = {
-  input?: DeleteNoteGroupingInput,
-  condition?: ModelNoteGroupingConditionInput | null,
-};
-
-export type DeleteNoteGroupingMutation = {
-  deleteNoteGrouping?:  {
-    __typename: "NoteGrouping",
-    id: string,
-    noteID: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    createdAt: string,
-    updatedAt: string,
-    OrderedNotes?:  {
-      __typename: "ModelNoteConnection",
-      items:  Array< {
-        __typename: "Note",
-        id: string,
-        title: string,
-        content: string,
-        sortednotecollectionID: string,
-        notegrouID: string,
-        _version: number,
-        _deleted?: boolean | null,
-        _lastChangedAt: number,
-        createdAt: string,
-        updatedAt: string,
-        owner?: string | null,
-      } | null >,
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-  } | null,
+export type ModelNoteConnection = {
+  __typename: "ModelNoteConnection",
+  items?:  Array<Note | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type CreateNoteMutationVariables = {
@@ -296,8 +125,7 @@ export type CreateNoteMutation = {
     id: string,
     title: string,
     content: string,
-    sortednotecollectionID: string,
-    notegrouID: string,
+    order: number,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
@@ -318,8 +146,7 @@ export type UpdateNoteMutation = {
     id: string,
     title: string,
     content: string,
-    sortednotecollectionID: string,
-    notegrouID: string,
+    order: number,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
@@ -340,109 +167,13 @@ export type DeleteNoteMutation = {
     id: string,
     title: string,
     content: string,
-    sortednotecollectionID: string,
-    notegrouID: string,
+    order: number,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
-  } | null,
-};
-
-export type GetNoteGroupingQueryVariables = {
-  id?: string,
-};
-
-export type GetNoteGroupingQuery = {
-  getNoteGrouping?:  {
-    __typename: "NoteGrouping",
-    id: string,
-    noteID: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    createdAt: string,
-    updatedAt: string,
-    OrderedNotes?:  {
-      __typename: "ModelNoteConnection",
-      items:  Array< {
-        __typename: "Note",
-        id: string,
-        title: string,
-        content: string,
-        sortednotecollectionID: string,
-        notegrouID: string,
-        _version: number,
-        _deleted?: boolean | null,
-        _lastChangedAt: number,
-        createdAt: string,
-        updatedAt: string,
-        owner?: string | null,
-      } | null >,
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-  } | null,
-};
-
-export type ListNoteGroupingsQueryVariables = {
-  filter?: ModelNoteGroupingFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ListNoteGroupingsQuery = {
-  listNoteGroupings?:  {
-    __typename: "ModelNoteGroupingConnection",
-    items:  Array< {
-      __typename: "NoteGrouping",
-      id: string,
-      noteID: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      createdAt: string,
-      updatedAt: string,
-      OrderedNotes?:  {
-        __typename: "ModelNoteConnection",
-        nextToken?: string | null,
-        startedAt?: number | null,
-      } | null,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type SyncNoteGroupingsQueryVariables = {
-  filter?: ModelNoteGroupingFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  lastSync?: number | null,
-};
-
-export type SyncNoteGroupingsQuery = {
-  syncNoteGroupings?:  {
-    __typename: "ModelNoteGroupingConnection",
-    items:  Array< {
-      __typename: "NoteGrouping",
-      id: string,
-      noteID: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      createdAt: string,
-      updatedAt: string,
-      OrderedNotes?:  {
-        __typename: "ModelNoteConnection",
-        nextToken?: string | null,
-        startedAt?: number | null,
-      } | null,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
   } | null,
 };
 
@@ -456,8 +187,7 @@ export type GetNoteQuery = {
     id: string,
     title: string,
     content: string,
-    sortednotecollectionID: string,
-    notegrouID: string,
+    order: number,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
@@ -481,8 +211,7 @@ export type ListNotesQuery = {
       id: string,
       title: string,
       content: string,
-      sortednotecollectionID: string,
-      notegrouID: string,
+      order: number,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
@@ -510,8 +239,7 @@ export type SyncNotesQuery = {
       id: string,
       title: string,
       content: string,
-      sortednotecollectionID: string,
-      notegrouID: string,
+      order: number,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
@@ -521,102 +249,6 @@ export type SyncNotesQuery = {
     } | null >,
     nextToken?: string | null,
     startedAt?: number | null,
-  } | null,
-};
-
-export type OnCreateNoteGroupingSubscription = {
-  onCreateNoteGrouping?:  {
-    __typename: "NoteGrouping",
-    id: string,
-    noteID: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    createdAt: string,
-    updatedAt: string,
-    OrderedNotes?:  {
-      __typename: "ModelNoteConnection",
-      items:  Array< {
-        __typename: "Note",
-        id: string,
-        title: string,
-        content: string,
-        sortednotecollectionID: string,
-        notegrouID: string,
-        _version: number,
-        _deleted?: boolean | null,
-        _lastChangedAt: number,
-        createdAt: string,
-        updatedAt: string,
-        owner?: string | null,
-      } | null >,
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-  } | null,
-};
-
-export type OnUpdateNoteGroupingSubscription = {
-  onUpdateNoteGrouping?:  {
-    __typename: "NoteGrouping",
-    id: string,
-    noteID: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    createdAt: string,
-    updatedAt: string,
-    OrderedNotes?:  {
-      __typename: "ModelNoteConnection",
-      items:  Array< {
-        __typename: "Note",
-        id: string,
-        title: string,
-        content: string,
-        sortednotecollectionID: string,
-        notegrouID: string,
-        _version: number,
-        _deleted?: boolean | null,
-        _lastChangedAt: number,
-        createdAt: string,
-        updatedAt: string,
-        owner?: string | null,
-      } | null >,
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-  } | null,
-};
-
-export type OnDeleteNoteGroupingSubscription = {
-  onDeleteNoteGrouping?:  {
-    __typename: "NoteGrouping",
-    id: string,
-    noteID: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    createdAt: string,
-    updatedAt: string,
-    OrderedNotes?:  {
-      __typename: "ModelNoteConnection",
-      items:  Array< {
-        __typename: "Note",
-        id: string,
-        title: string,
-        content: string,
-        sortednotecollectionID: string,
-        notegrouID: string,
-        _version: number,
-        _deleted?: boolean | null,
-        _lastChangedAt: number,
-        createdAt: string,
-        updatedAt: string,
-        owner?: string | null,
-      } | null >,
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
   } | null,
 };
 
@@ -630,8 +262,7 @@ export type OnCreateNoteSubscription = {
     id: string,
     title: string,
     content: string,
-    sortednotecollectionID: string,
-    notegrouID: string,
+    order: number,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
@@ -651,8 +282,7 @@ export type OnUpdateNoteSubscription = {
     id: string,
     title: string,
     content: string,
-    sortednotecollectionID: string,
-    notegrouID: string,
+    order: number,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
@@ -672,8 +302,7 @@ export type OnDeleteNoteSubscription = {
     id: string,
     title: string,
     content: string,
-    sortednotecollectionID: string,
-    notegrouID: string,
+    order: number,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,

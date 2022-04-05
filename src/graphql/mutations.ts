@@ -2,105 +2,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createNoteGrouping = /* GraphQL */ `
-  mutation CreateNoteGrouping(
-    $input: CreateNoteGroupingInput!
-    $condition: ModelNoteGroupingConditionInput
-  ) {
-    createNoteGrouping(input: $input, condition: $condition) {
-      id
-      noteID
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      OrderedNotes {
-        items {
-          id
-          title
-          content
-          sortednotecollectionID
-          notegrouID
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          owner
-        }
-        nextToken
-        startedAt
-      }
-    }
-  }
-`;
-export const updateNoteGrouping = /* GraphQL */ `
-  mutation UpdateNoteGrouping(
-    $input: UpdateNoteGroupingInput!
-    $condition: ModelNoteGroupingConditionInput
-  ) {
-    updateNoteGrouping(input: $input, condition: $condition) {
-      id
-      noteID
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      OrderedNotes {
-        items {
-          id
-          title
-          content
-          sortednotecollectionID
-          notegrouID
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          owner
-        }
-        nextToken
-        startedAt
-      }
-    }
-  }
-`;
-export const deleteNoteGrouping = /* GraphQL */ `
-  mutation DeleteNoteGrouping(
-    $input: DeleteNoteGroupingInput!
-    $condition: ModelNoteGroupingConditionInput
-  ) {
-    deleteNoteGrouping(input: $input, condition: $condition) {
-      id
-      noteID
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      OrderedNotes {
-        items {
-          id
-          title
-          content
-          sortednotecollectionID
-          notegrouID
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          owner
-        }
-        nextToken
-        startedAt
-      }
-    }
-  }
-`;
 export const createNote = /* GraphQL */ `
   mutation CreateNote(
     $input: CreateNoteInput!
@@ -110,8 +11,7 @@ export const createNote = /* GraphQL */ `
       id
       title
       content
-      sortednotecollectionID
-      notegrouID
+      order
       _version
       _deleted
       _lastChangedAt
@@ -130,8 +30,7 @@ export const updateNote = /* GraphQL */ `
       id
       title
       content
-      sortednotecollectionID
-      notegrouID
+      order
       _version
       _deleted
       _lastChangedAt
@@ -150,8 +49,7 @@ export const deleteNote = /* GraphQL */ `
       id
       title
       content
-      sortednotecollectionID
-      notegrouID
+      order
       _version
       _deleted
       _lastChangedAt

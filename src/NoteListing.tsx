@@ -40,6 +40,13 @@ const NoteListing = ({onDelete}: NoteListingProps) => {
     //   fetchNotes(tempDefaultVar);
     // }
 
+    // DataStore.query(Note, Predicates.ALL, {
+    //   sort: s => s.order(SortDirection.ASCENDING)
+    // }).then(items => {
+    //   console.log("loaded notes from query", items);
+    //   setNotes(items)
+    // });
+
       // sort by new notes. add to the top. add filtering controls. add folders for organization.
     const allNotesSubscription = DataStore.observeQuery(Note, Predicates.ALL, {
       sort: s => s.order(SortDirection.ASCENDING)
