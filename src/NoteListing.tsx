@@ -1,6 +1,9 @@
 import { DataStore, Predicates, SortDirection } from "aws-amplify";
 import update from 'immutability-helper'
-import { useCallback, useEffect, useState } from "react";
+import { debounce } from "lodash";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { DndProvider } from "react-dnd";
+import { TouchBackend } from "react-dnd-touch-backend";
 import { Note } from "./models";
 import NoteCard from "./NoteCard";
 import notes from "./routes/notes";
@@ -18,22 +21,7 @@ const NoteListing = ({onDelete}: NoteListingProps) => {
   // const [defaultGroup, setDefaultGroup] = useState<NoteGrouping>();
 
   // TODO: refactor this and make it an observablequery
-  // sort by new notes. add to the top. add filtering controls.
-  async function fetchNotes() {
-    async function queryNotes() {
-        const notes = await DataStore.query(Note, Predicates.ALL, {
-          sort: s => s.order(SortDirection.ASCENDING)
-        });
-        setNotes(notes);
-    }
 
-    try {
-        await queryNotes();
-        
-    } catch(e) {
-        console.log("error", e);
-    }
-  }
 
   // TODO: part of the old ordered note grouping implemention.
   // async function getDefaultNoteGroup() {
@@ -52,33 +40,67 @@ const NoteListing = ({onDelete}: NoteListingProps) => {
     //   fetchNotes(tempDefaultVar);
     // }
 
-    // load();
-    fetchNotes()
+    // DataStore.query(Note, Predicates.ALL, {
+    //   sort: s => s.order(SortDirection.ASCENDING)
+    // }).then(items => {
+    //   console.log("loaded notes from query", items);
+    //   setNotes(items)
+    // });
+
+      // sort by new notes. add to the top. add filtering controls. add folders for organization.
+    const allNotesSubscription = DataStore.observeQuery(Note, Predicates.ALL, {
+      sort: s => s.order(SortDirection.ASCENDING)
+    }).subscribe(snapshot => {
+      const {items, isSynced} = snapshot;
+      setNotes(items);
+    });
+
+    return () => allNotesSubscription.unsubscribe();
 
   }, []);
 
-  function refreshNotesList() {
-    fetchNotes();
-  }
+  const debouncedNoteDragUpdate = useCallback(
+    (selectedNote: Note, index: number) => {debounce(async () => {
+      try {
+        await DataStore.save(
+          Note.copyOf(selectedNote, updated => {
+            updated.order = index;
+          })
+        );
+      } catch (e) {
+        console.error("Error updating draggable card order on AWS Datastore.")
+      }
+    }, 250)}, []);
 
-  const moveCard = useCallback((dragIndex: number, hoverIndex: number) => {
-    setNotes((prevNotes: Note[]) =>
-    update(prevNotes, {
-      $splice: [
-        [dragIndex, 1],
-        [hoverIndex, 0, prevNotes[dragIndex] as Note],
-      ],
-    }),
-    )
+  const moveCard = useCallback((dragIndex: number, hoverIndex: number, isDragging: boolean) => {
+    setNotes((prevNotes: Note[]) => {
+      // TODO: add a limiter?
+      try {
+        if(!isDragging) {
+          console.log("SAVING", prevNotes[dragIndex]);
+          DataStore.save(
+            Note.copyOf(prevNotes[dragIndex], updated => {
+              updated.order = dragIndex;
+            })
+          );
+        } else {
+          console.log("dragging...");
+        }
+        // debouncedNoteDragUpdate(prevNotes[dragIndex], dragIndex);
+      } catch (e) {
+        console.error("Error updating draggable card order on AWS Datastore.")
+      }
+      return update(prevNotes, {
+        $splice: [
+          [dragIndex, 1],
+          [hoverIndex, 0, prevNotes[dragIndex] as Note],
+        ],
+      })
+    })
   }, [])
   
   const renderCard = useCallback(
     (card: Note, index: number) => {
-        DataStore.save(
-          Note.copyOf(card, updated => {
-            updated.order = index;
-          })
-        );
         return (
           <NoteCard
                 key={card.id}
@@ -101,9 +123,17 @@ const NoteListing = ({onDelete}: NoteListingProps) => {
   } else {
     output = (
     <div style={{display: "flex", flexDirection: "column", height: "100vh", padding: "10px"}}>
-        <button onClick={refreshNotesList}>List notes</button>
+        {/* <button onClick={refreshNotesList}>List notes</button> */}
         {notes.map((card, i) => renderCard(card, i))}
     </div>);
+  }
+
+  // allow vertical scrolling
+  const options = {
+    scrollAngleRanges: [
+      { start: 30, end: 150 },
+      { start: 210, end: 330 }
+    ]
   }
 
   return output;

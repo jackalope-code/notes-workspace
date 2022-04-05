@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import awsConfig from './aws-exports';
 import Amplify from 'aws-amplify';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Account from './routes/account';
@@ -18,7 +17,7 @@ import { DndProvider } from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
-
+import awsConfig from './aws-exports';
 
 const isLocalhost = Boolean(
   window.location.hostname === "localhost" ||
@@ -50,11 +49,16 @@ const updatedAwsConfig = {
   }
 }
 
+// Additional localhost debug
+if(isLocalhost) {
+  Amplify.Logger.LOG_LEVEL = 'DEBUG'
+}
 Amplify.configure(updatedAwsConfig);
 
 
 ReactDOM.render(
   <React.StrictMode>
+    {/* TODO: Move the AppBar outside of the Authenticator to try to get a better screen refresh */}
     <Authenticator>
       {({signOut, user}) => (
         

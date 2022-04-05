@@ -6,9 +6,11 @@ interface ConfirmDialogProps {
     handleChoiceYes: MouseEventHandler;
     handleChoiceNo: MouseEventHandler;
     handleClose?: MouseEventHandler;
+    title: string;
+    children: any;
 }
 
-const ConfirmDialog = ({open, handleClose, handleChoiceYes, handleChoiceNo}: ConfirmDialogProps) => {
+const ConfirmDialog = ({open, handleClose, handleChoiceYes, handleChoiceNo, children, title}: ConfirmDialogProps) => {
     return (
         <Dialog
             open={open}
@@ -17,11 +19,11 @@ const ConfirmDialog = ({open, handleClose, handleChoiceYes, handleChoiceNo}: Con
             aria-describedby="alert-dialog-description"
         >
             <DialogTitle id="alert-dialog-title">
-                {"Delete note?"}
+                {title}
             </DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                    Are you sure that you want to delete this note?
+                    {children}
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
